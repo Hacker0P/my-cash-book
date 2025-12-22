@@ -56,6 +56,7 @@ function App() {
 
   // PWA Install Prompt Logic
   const [installPrompt, setInstallPrompt] = useState(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handler = (e) => {
@@ -229,8 +230,8 @@ function App() {
   return (
     <Layout>
       {/* Header / Dashboard */}
-      <header className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6 pb-32 sticky top-0 z-10 shadow-2xl ring-1 ring-white/10">
-        <div className="flex items-center justify-between mb-8">
+      <header className={`bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white sticky top-0 z-10 shadow-2xl ring-1 ring-white/10 transition-all duration-300 ease-in-out ${isScrolled ? 'p-4 pb-24' : 'p-6 pb-32'}`}>
+        <div className="flex items-center justify-between mb-4 transition-all">
           <div className="flex items-center gap-3">
              <button 
                onClick={() => setShowMenu(true)}
@@ -239,13 +240,25 @@ function App() {
                <Menu size={24} />
              </button>
              <div>
-               <div className="font-bold tracking-tight text-lg flex items-center gap-2">
-                 <div className="p-1.5 bg-emerald-500/20 rounded-lg text-emerald-400">
-                   <Wallet size={16} />
-                 </div>
-                 {t.appTitle}
+               {userName ? (
+                  <div className={`flex flex-col transition-all duration-300 ${isScrolled ? 'opacity-0 h-0 w-0 overflow-hidden' : 'opacity-100'}`}>
+                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      {new Date().getHours() < 12 ? 'Good Morning,' : new Date().getHours() < 18 ? 'Good Afternoon,' : 'Good Evening,'}
+                    </span>
+                    <span className="text-xl font-black tracking-tight text-white mb-0.5">{userName}</span>
+                  </div>
+               ) : (
+                  <div className="font-bold tracking-tight text-lg flex items-center gap-2">
+                    <div className="p-1.5 bg-emerald-500/20 rounded-lg text-emerald-400">
+                      <Wallet size={16} />
+                    </div>
+                    {t.appTitle}
+                  </div>
+               )}
+               {/* Scrolled State Title (Always shows App Name when scrolled) */}
+               <div className={`font-bold tracking-tight text-lg flex items-center gap-2 transition-all duration-300 absolute left-14 top-5 ${isScrolled ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+                  {t.appTitle}
                </div>
-               {userName && <div className="text-xs text-slate-400 font-medium truncate max-w-[150px] ml-1">{userName}</div>}
              </div>
           </div>
           
@@ -282,7 +295,8 @@ function App() {
           </div>
         </div>
         
-        <div className="flex flex-col items-center mb-8 relative">
+        {/* Collapsible Global Balance */}
+        <div className={`transition-all duration-500 ease-spring flex flex-col items-center relative overflow-hidden ${isScrolled ? 'max-h-0 opacity-0 mb-2' : 'max-h-40 opacity-100 mb-8'}`}>
            {/* Decorative Glow */}
            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-emerald-500/20 blur-3xl rounded-full pointer-events-none"></div>
            
@@ -374,7 +388,10 @@ function App() {
       </header>
 
       {/* Transactions List */}
-      <main className="flex-1 overflow-y-auto pb-24 bg-slate-50 -mt-8 rounded-t-3xl relative z-20 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] pt-6 px-2">
+      <main 
+        onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 20)}
+        className="flex-1 overflow-y-auto pb-24 bg-slate-50 -mt-8 rounded-t-3xl relative z-20 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] pt-6 px-2 transition-transform"
+      >
         {filteredTransactions.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-48 text-slate-400 opacity-60">
             <div className="w-16 h-16 bg-slate-200 rounded-full mb-4 animate-pulse"></div>
