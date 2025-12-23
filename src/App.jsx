@@ -6,6 +6,7 @@ import { TransactionCard } from './components/TransactionCard';
 import { TransactionForm } from './components/TransactionForm';
 import { CalendarModal } from './components/CalendarModal';
 import { SettingsMenu } from './components/SettingsMenu';
+import { AnalyticsDashboard } from './components/AnalyticsDashboard';
 import { 
   Plus, Minus, Wallet, Calendar as CalendarIcon, 
   ChevronLeft, ChevronRight, BarChart3, Languages, Menu, 
@@ -37,6 +38,7 @@ function App() {
     return (saved && TRANSLATIONS[saved]) ? saved : null;
   });
   const [showMenu, setShowMenu] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const [userName, setUserName] = useState(() => localStorage.getItem('cashbook_username') || '');
 
   // Update username if changed in other components (via storage event or re-render)
@@ -126,17 +128,19 @@ function App() {
     }
   };
   
-  const handleDelete = async () => {
-     if (actionSheetTarget) {
-        await db.transactions.delete(actionSheetTarget.id);
+  const handleDelete = async (id = null) => {
+     const targetId = id || actionSheetTarget?.id;
+     if (targetId) {
+        await db.transactions.delete(targetId);
         setActionSheetTarget(null);
      }
   };
 
-  const handleEdit = () => {
-    if (actionSheetTarget) {
-        setEditTarget(actionSheetTarget);
-        setActiveModal(actionSheetTarget.type);
+  const handleEdit = (transaction = null) => {
+    const target = transaction || actionSheetTarget;
+    if (target) {
+        setEditTarget(target);
+        setActiveModal(target.type);
         setActionSheetTarget(null);
     }
   };
@@ -275,7 +279,7 @@ function App() {
 
             {/* PDF Export */}
             <button 
-               onClick={() => generatePDF(filteredTransactions, label, { totalIn, totalOut, netBalance }, t)}
+               onClick={() => generatePDF(filteredTransactions, label, { totalIn, totalOut, netBalance }, t, userName)}
                className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 transition-all active:scale-95 text-white/80"
                title={t.exportPDF}
             >
@@ -421,7 +425,13 @@ function App() {
                    <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden mx-1">
                       {dayTransactions.map((t, idx) => (
                         <div key={t.id} className={idx !== dayTransactions.length - 1 ? "border-b border-slate-100" : ""}>
-                          <TransactionCard transaction={t} lang={language} onLongPress={setActionSheetTarget} />
+                          <TransactionCard 
+                            transaction={t} 
+                            lang={language} 
+                            onLongPress={setActionSheetTarget}
+                            onEdit={() => handleEdit(t)}
+                            onDelete={() => handleDelete(t.id)}
+                          />
                         </div>
                       ))}
                    </div>
@@ -436,6 +446,7 @@ function App() {
       <div className="fixed bottom-6 left-0 right-0 flex justify-center gap-4 px-6 z-40 max-w-md mx-auto pointer-events-none">
         <button
           onClick={() => {
+             if (navigator.vibrate) navigator.vibrate(10);
              setEditTarget(null);
              setActiveModal('IN');
           }}
@@ -446,6 +457,7 @@ function App() {
         </button>
         <button
           onClick={() => {
+             if (navigator.vibrate) navigator.vibrate(10);
              setEditTarget(null);
              setActiveModal('OUT');
           }}
@@ -519,7 +531,18 @@ function App() {
            lang={language}
            onClose={() => setShowMenu(false)}
            onLanguageChange={setLang}
+           onOpenAnalytics={() => setShowAnalytics(true)}
         />
+      )}
+
+      {showAnalytics && (
+         <div className="fixed inset-0 z-[60] bg-white">
+            <AnalyticsDashboard 
+               transactions={transactions} 
+               onClose={() => setShowAnalytics(false)}
+               t={t}
+            />
+         </div>
       )}
     </Layout>
   );
