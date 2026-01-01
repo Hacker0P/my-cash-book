@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, User, Globe, Shield, Download, FileJson, Check, ChevronRight, AlertTriangle, Info, Trash2, LogOut, Wallet, BarChart3, Settings } from 'lucide-react';
+import { X, User, Globe, Shield, Download, FileJson, Check, ChevronRight, AlertTriangle, Info, Trash2, LogOut, Wallet, BarChart3, Settings, Sun, Moon } from 'lucide-react';
 import { TRANSLATIONS } from '../translations';
 import { db } from '../db';
 
@@ -73,7 +73,7 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
       {/* Sidebar Drawer */}
       <div 
         onClick={(e) => e.stopPropagation()}
-        className="w-[85%] max-w-[320px] h-full bg-slate-50 shadow-2xl animate-in slide-in-from-left duration-300 flex flex-col relative z-10"
+        className="w-[85%] max-w-[320px] h-full bg-slate-50 shadow-2xl animate-in slide-in-from-left duration-300 flex flex-col relative z-10 transition-colors"
       >
         {/* Header (Matches App.jsx & Analytics) */}
         <div className={`sticky top-0 z-20 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200/60' : 'bg-transparent'}`}>
@@ -91,6 +91,7 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
             </div>
             <button 
                 onClick={() => { vibrate(); onClose(); }}
+                aria-label="Close Settings"
                 className="p-2 bg-white/50 hover:bg-slate-100 rounded-full transition-colors active:scale-95"
             >
                 <X size={20} className="text-slate-600" />
@@ -100,8 +101,10 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
 
         <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-32" onScroll={handleScroll}>
           
+
+
           {/* Section: Profile */}
-          <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-0">
+          <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-75">
              <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
                 <User size={14} />
                 {t.profile}

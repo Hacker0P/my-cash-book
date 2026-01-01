@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
 
 :root {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -6,10 +7,39 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
 body {
-  @apply bg-slate-50 text-slate-900 select-none;
+  @apply bg-slate-50 text-slate-900 select-none overflow-x-hidden;
+  overscroll-behavior-y: none;
 }
 
 ::selection {
   @apply bg-emerald-500/30 text-emerald-900;
+}
+
+/* Global Focus Ring for Accessibility */
+:focus-visible {
+  @apply outline-none ring-2 ring-emerald-500 ring-offset-2 ring-offset-white;
+}
+
+/* Scrollbar Polish */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-300;
 }

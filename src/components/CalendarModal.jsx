@@ -27,10 +27,10 @@ export function CalendarModal({ selectedDate, onClose, onSelect }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 p-4">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200 border border-transparent">
         
         {/* Header */}
-        <div className="bg-slate-900 p-4 flex items-center justify-between text-white">
+        <div className="bg-slate-900 p-4 flex items-center justify-between text-white border-b border-transparent">
            <h2 className="text-xl font-bold tracking-wide pl-2">
              {format(currentMonth, 'MMMM yyyy')}
            </h2>
