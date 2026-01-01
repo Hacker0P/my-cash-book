@@ -9,7 +9,7 @@ const vibrate = () => {
 };
 
 export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics }) {
-  const t = TRANSLATIONS[lang] || TRANSLATIONS['en'];
+  const t = { ...TRANSLATIONS['en'], ...TRANSLATIONS[lang] };
   const [localName, setLocalName] = useState(() => localStorage.getItem('cashbook_username') || '');
   const [scrolled, setScrolled] = useState(false);
 
@@ -57,7 +57,7 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
 
   const handleReset = async () => {
     vibrate();
-    if (confirm("WARNING: This will delete ALL your transaction data permanently. Are you sure?")) {
+    if (confirm(t.confirmReset)) {
       await db.transactions.clear();
       window.location.reload();
     }
@@ -86,8 +86,8 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
                         <Settings size={20} strokeWidth={2.5} />
                     </div>
                  </div>
-                 <h2 className="text-xl font-black text-slate-900 tracking-tight mt-3">Settings</h2>
-                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Preferences & Data</p>
+                 <h2 className="text-xl font-black text-slate-900 tracking-tight mt-3">{t.settings}</h2>
+                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{t.preferences}</p>
             </div>
             <button 
                 onClick={() => { vibrate(); onClose(); }}
@@ -128,8 +128,8 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
              </div>
              <div className="grid grid-cols-1 gap-3">
                {[
-                 { code: 'en', label: 'English', sub: 'Default' },
-                 { code: 'bn', label: 'বাংলা (Bengali)', sub: 'বাংলা' }
+                 { code: 'en', label: t.english, sub: t.defaultLang },
+                 { code: 'bn', label: t.bengali, sub: 'বাংলা' }
                ].map((opt) => (
                  <button
                    key={opt.code}
@@ -160,7 +160,7 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
           <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-100">
              <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
                  <BarChart3 size={14} />
-                 Insights
+                 {t.financialInsights}
              </div>
              <div className="bg-white p-1 rounded-2xl border border-slate-200/60 shadow-sm">
                 <button 
@@ -176,8 +176,8 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
                       <BarChart3 size={20} />
                     </div>
                     <div className="text-left">
-                      <div className="font-bold text-slate-900 text-sm">View Analytics</div>
-                      <div className="text-xs text-slate-400 font-medium">Deep financial insights</div>
+                       <div className="font-bold text-slate-900 text-sm">{t.viewAnalytics}</div>
+                       <div className="text-xs text-slate-400 font-medium">{t.deepInsights}</div>
                     </div>
                   </div>
                   <ChevronRight size={18} className="text-slate-300 group-hover:text-emerald-500 transition-colors" />
@@ -214,7 +214,7 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
           <div className="space-y-3 pt-6 border-t border-slate-200/60 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200">
              <div className="flex items-center gap-2 text-xs font-bold text-rose-400 uppercase tracking-wider ml-1">
                  <AlertTriangle size={14} />
-                 Danger Zone
+                 {t.dangerZone}
              </div>
              <button 
                onClick={handleReset}
@@ -224,7 +224,7 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
                    <div className="p-2 bg-rose-100 rounded-lg group-hover:bg-rose-200 transition-colors">
                         <Trash2 size={18} />
                    </div>
-                   Reset App Data
+                    {t.resetData}
                 </span>
                 <ChevronRight size={18} className="opacity-50" />
              </button>
@@ -235,8 +235,8 @@ export function SettingsMenu({ onClose, lang, onLanguageChange, onOpenAnalytics 
               <div className="w-12 h-12 bg-slate-100 rounded-2xl mb-3 flex items-center justify-center shadow-inner">
                  <div className="font-black text-slate-300 text-xl">CB</div>
               </div>
-              <p className="font-bold text-xs uppercase tracking-widest text-slate-300">My Cash Book</p>
-              <p className="text-[10px] font-medium opacity-50">v1.2.0 • Premium Edition</p>
+              <p className="font-bold text-xs uppercase tracking-widest text-slate-300">{t.appTitle}</p>
+              <p className="text-[10px] font-medium opacity-50">v1.2.0 • {t.premiumEdition}</p>
            </div>
 
         </div>

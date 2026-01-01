@@ -248,7 +248,7 @@ export function AnalyticsDashboard({ transactions, onClose, t }) {
 
        {/* 2. Quick Activity Heatmap (Last 14 Days) */}
        <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
-          <SectionHeader title="Spending Heatmap" subtitle="Last 2 Weeks Activity" icon={Activity} />
+          <SectionHeader title={t.spendingHeatmap} subtitle={t.last2Weeks} icon={Activity} />
           <div className="grid grid-cols-7 gap-2">
              {analysis.cumulativeData.slice(-14).map((day, idx) => {
                 const intensity = Math.min(day.daySum / (analysis.dailyAvgSpend * 2), 1); // Cap at 2x average
@@ -271,10 +271,10 @@ export function AnalyticsDashboard({ transactions, onClose, t }) {
        {/* 3. Top Categories Preview */}
        <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
           <SectionHeader 
-             title="Top Categories" 
-             subtitle="Expense Breakdown" 
+             title={t.topCategories} 
+             subtitle={t.expenseBreakdown} 
              icon={PieChart}
-             action={<button onClick={() => { vibrate(); setActiveTab('categories'); }} className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg active:scale-95 transition-transform">View All</button>}
+             action={<button onClick={() => { vibrate(); setActiveTab('categories'); }} className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg active:scale-95 transition-transform">{t.viewAll}</button>}
           />
           <div className="space-y-4">
              {analysis.expenseCategories.slice(0, 4).map((cat, idx) => (
@@ -306,7 +306,7 @@ export function AnalyticsDashboard({ transactions, onClose, t }) {
         
         {/* 1. Cumulative Spending Chart */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
-           <SectionHeader title="Burn Rate" subtitle="Cumulative Spending" icon={TrendingUp} />
+           <SectionHeader title={t.burnRate} subtitle={t.cumulativeSpending} icon={TrendingUp} />
            <div className="h-48 flex items-end gap-1 relative pt-4">
               {/* Grid Lines */}
               <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-10">
@@ -333,21 +333,21 @@ export function AnalyticsDashboard({ transactions, onClose, t }) {
               })}
            </div>
            <div className="flex justify-between mt-2 text-[10px] font-bold text-slate-300 uppercase">
-              <span>Start</span>
-              <span>Now</span>
+              <span>{t.start}</span>
+              <span>{t.now}</span>
            </div>
         </div>
 
         {/* 2. Frequency Stats */}
         <div className="grid grid-cols-2 gap-3">
            <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
-              <div className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-2">Avg Transaction</div>
+              <div className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-2">{t.avgTransaction}</div>
               <div className="text-xl font-black text-slate-900">₹{Math.round(analysis.avgTxn).toLocaleString('en-IN')}</div>
-              <div className="text-slate-400 text-[10px] mt-1 font-medium">{analysis.countTxn} total</div>
+              <div className="text-slate-400 text-[10px] mt-1 font-medium">{analysis.countTxn} {t.total}</div>
            </div>
            
            <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
-              <div className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-2">Largest Purchase</div>
+              <div className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-2">{t.largestPurchase}</div>
               <div className="text-xl font-black text-slate-900">₹{analysis.maxTxn.toLocaleString('en-IN')}</div>
            </div>
         </div>
@@ -360,7 +360,7 @@ export function AnalyticsDashboard({ transactions, onClose, t }) {
         
         {/* 1. Weekly Pattern */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
-           <SectionHeader title="Weekly Rhythm" subtitle="Spending by Day" icon={CalendarDays} />
+           <SectionHeader title={t.weeklyRhythm} subtitle={t.spendingByDay} icon={CalendarDays} />
            <div className="flex items-end justify-between h-40 gap-2">
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, idx) => {
                  const amount = analysis.weekDayCounts[idx];
@@ -386,7 +386,7 @@ export function AnalyticsDashboard({ transactions, onClose, t }) {
 
         {/* 2. Daily Pattern (Hourly) */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
-           <SectionHeader title="Hourly Activity" subtitle="Peak Hours (0-24h)" icon={Clock} />
+           <SectionHeader title={t.hourlyActivity} subtitle={t.peakHours} icon={Clock} />
            <div className="flex items-end justify-between h-32 gap-0.5">
               {analysis.hourCounts.map((amount, idx) => {
                  const max = Math.max(...analysis.hourCounts, 1);
@@ -417,8 +417,8 @@ export function AnalyticsDashboard({ transactions, onClose, t }) {
         <div className="bg-gradient-to-br from-emerald-600 to-teal-700 p-6 rounded-2xl text-white shadow-xl shadow-emerald-900/10 relative overflow-hidden">
            <Zap size={140} className="absolute -right-6 -bottom-6 text-white/10 rotate-12" />
            <div className="relative z-10">
-              <h3 className="text-2xl font-black mb-1">Smart Analysis</h3>
-              <p className="text-emerald-100 text-sm font-medium mb-6">AI-driven patterns detected.</p>
+              <h3 className="text-2xl font-black mb-1">{t.smartAnalysis}</h3>
+              <p className="text-emerald-100 text-sm font-medium mb-6">{t.aiDrivenPatterns}</p>
               
               <div className="space-y-3">
                  {/* Insight 1: Spending Trend */}
@@ -427,26 +427,28 @@ export function AnalyticsDashboard({ transactions, onClose, t }) {
                        <TrendingUp size={18} />
                     </div>
                     <div>
-                       <div className="font-bold text-sm text-white"> Spending Velocity</div>
+                       <div className="font-bold text-sm text-white">{t.spendingVelocity}</div>
                        <p className="text-xs text-emerald-50 mt-1 leading-relaxed">
-                          You are spending <strong className="text-white">₹{Math.round(analysis.dailyAvgSpend)}</strong> per day on average. 
-                       </p>
+                           {t.spendingVelocityText.replace('{amount}', Math.round(analysis.dailyAvgSpend))}
+                        </p>
                     </div>
                  </div>
 
                  {/* Insight 2: Top Category Dominance */}
-                 <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 flex items-start gap-3">
-                    <div className="p-2 bg-white/20 rounded-lg">
-                       <PieChart size={18} />
-                    </div>
-                    <div>
-                       <div className="font-bold text-sm text-white">Concentration</div>
-                       <p className="text-xs text-emerald-50 mt-1 leading-relaxed">
-                          <strong className="text-white">{analysis.expenseCategories[0]?.percentage.toFixed(0)}%</strong> of your expenses go to 
-                          <strong className="text-white"> {analysis.expenseCategories[0]?.label}</strong>. 
-                       </p>
-                    </div>
-                 </div>
+                  <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 flex items-start gap-3">
+                     <div className="p-2 bg-white/20 rounded-lg">
+                        <PieChart size={18} />
+                     </div>
+                     <div>
+                        <div className="font-bold text-sm text-white">{t.concentration}</div>
+                        <p className="text-xs text-emerald-50 mt-1 leading-relaxed">
+                           {t.concentrationText
+                              .replace('{percent}', analysis.expenseCategories[0]?.percentage.toFixed(0))
+                              .replace('{category}', analysis.expenseCategories[0]?.label)
+                           }
+                        </p>
+                     </div>
+                  </div>
 
               </div>
            </div>
@@ -565,8 +567,8 @@ export function AnalyticsDashboard({ transactions, onClose, t }) {
                   <ArrowLeft size={22} />
                </button>
                <div>
-                  <h2 className="text-lg font-black text-slate-900 tracking-tight leading-none">Financial Insights</h2>
-                  <p className={`text-[10px] font-bold text-emerald-600 uppercase tracking-widest mt-0.5 ${scrolled ? 'opacity-0 h-0 hidden' : 'opacity-100'}`}>Analytics Suite</p>
+                  <h2 className="text-lg font-black text-slate-900 tracking-tight leading-none">{t.financialInsights}</h2>
+                  <p className={`text-[10px] font-bold text-emerald-600 uppercase tracking-widest mt-0.5 ${scrolled ? 'opacity-0 h-0 hidden' : 'opacity-100'}`}>{t.analyticsSuite}</p>
                </div>
             </div>
             {/* Time Filter Pills */}

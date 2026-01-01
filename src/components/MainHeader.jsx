@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wallet, Menu, Download, Calendar as CalendarIcon, Filter } from 'lucide-react';
+import { Wallet, Menu, Download, Calendar as CalendarIcon } from 'lucide-react';
 
 export function MainHeader({ 
   isScrolled, 
@@ -11,7 +11,6 @@ export function MainHeader({
   onInstall, 
   onExportPDF, 
   onOpenCalendar,
-  onOpenFilters,
   children,
   className
 }) {
@@ -38,11 +37,10 @@ export function MainHeader({
                   onClick={onInstall}
                   className="px-3 py-1.5 rounded-full bg-emerald-400 text-emerald-950 font-bold text-xs hover:bg-emerald-300 transition-all active:scale-95 shadow-lg shadow-emerald-500/20 animate-in fade-in zoom-in"
                >
-                  Install App
+                  {t.installApp}
                </button>
              )}
              
-             {/* Action Buttons Group */}
              <div className="flex gap-2 text-white">
                 <button 
                    onClick={onExportPDF}
@@ -58,13 +56,6 @@ export function MainHeader({
                 >
                    <CalendarIcon size={20} />
                 </button>
-                <button 
-                   onClick={onOpenFilters}
-                   aria-label="Filter Options"
-                   className="p-2 rounded-xl transition-all active:scale-95 bg-white/10 hover:bg-white/20"
-                >
-                   <Filter size={20} />
-                </button>
              </div>
            </div>
         </div>
@@ -76,7 +67,7 @@ export function MainHeader({
              {userName ? (
                 <div className="animate-in fade-in slide-in-from-bottom-2 duration-700">
                   <span className="block text-emerald-100 text-sm font-medium mb-1">
-                    {new Date().getHours() < 12 ? 'Good Morning,' : new Date().getHours() < 18 ? 'Good Afternoon,' : 'Good Evening,'}
+                    {new Date().getHours() < 12 ? t.goodMorning : new Date().getHours() < 18 ? t.goodAfternoon : t.goodEvening}
                   </span>
                   <span className="text-3xl font-black tracking-tight text-white block mb-6">{userName}</span>
                 </div>
@@ -94,7 +85,7 @@ export function MainHeader({
            <div className={`transition-all duration-500 origin-left ${isScrolled ? 'scale-75 -translate-y-1' : 'scale-100 translate-y-0'}`}>
               <div className={`glass-card ${!isScrolled ? 'bg-white/10 backdrop-blur-md border border-white/10 p-5 rounded-3xl shadow-2xl' : ''}`}>
                  <div className={`text-sm font-bold uppercase tracking-widest mb-1 ${isScrolled ? 'text-emerald-200' : 'text-emerald-100'}`}>
-                    Net Balance
+                     {t.netBalance}
                  </div>
                  <div className="text-4xl font-black tracking-tighter text-white drop-shadow-sm">
                     ₹{balance.toLocaleString('en-IN')}

@@ -18,6 +18,7 @@ import {
   startOfWeek, endOfWeek, startOfMonth, endOfMonth, isWithinInterval,
   startOfYear, endOfYear, parseISO
 } from 'date-fns';
+import { bn, enUS } from 'date-fns/locale';
 import { TRANSLATIONS } from './translations';
 import { generatePDF } from './utils/pdfGenerator';
 
@@ -56,10 +57,10 @@ function App() {
   }, [showMenu]);
 
 
+  const t = { ...TRANSLATIONS['en'], ...TRANSLATIONS[language] };
+  const dateLocale = language === 'bn' ? bn : enUS;
 
-
-
-  const t = TRANSLATIONS[language] || TRANSLATIONS['en'] || {};
+  // ... (rest of code)
 
   const setLang = (lang) => {
     setLanguage(lang);
@@ -219,11 +220,11 @@ function App() {
                 {viewMode === 'custom' && (
                   <div className="flex justify-center gap-2 items-center animate-in fade-in slide-in-from-top-2 pointer-events-auto">
                      <button onClick={() => { setDatePickerTarget('start'); setShowCalendar(true); }} className="bg-white/10 px-4 py-2 rounded-xl text-sm text-white font-medium border border-white/10 hover:bg-white/20 transition-colors">
-                       {format(customRange.start, 'dd MMM yyyy')}
+                       {format(customRange.start, 'dd MMM yyyy', { locale: dateLocale })}
                      </button>
                      <ArrowRight size={16} className="text-white/30" />
                      <button onClick={() => { setDatePickerTarget('end'); setShowCalendar(true); }} className="bg-white/10 px-4 py-2 rounded-xl text-sm text-white font-medium border border-white/10 hover:bg-white/20 transition-colors">
-                       {format(customRange.end, 'dd MMM yyyy')}
+                       {format(customRange.end, 'dd MMM yyyy', { locale: dateLocale })}
                      </button>
                   </div>
                 )}
@@ -236,7 +237,7 @@ function App() {
                        className="bg-white/10 px-5 py-2 rounded-full text-xs font-bold text-white border border-white/10 hover:bg-white/20 transition-colors flex items-center gap-2"
                      >
                        <CalendarIcon size={14} className="opacity-70" />
-                       {format(selectedDate, 'dd MMM yyyy')}
+                       {format(selectedDate, 'dd MMM yyyy', { locale: dateLocale })}
                      </button>
                      
                      <button 
@@ -276,19 +277,19 @@ function App() {
         {/* Scrollable Content Layer */}
         <main 
            onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 50)}
-           className="flex-1 overflow-y-auto w-full relative z-20 pt-[420px] pb-24 px-0 no-scrollbar pointer-events-none"
+           className="flex-1 overflow-y-auto w-full relative z-20 pt-[580px] pb-24 px-0 no-scrollbar pointer-events-none"
         >
-          <div className="bg-slate-50 min-h-[500px] rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] pt-6 px-2 relative -mt-4 ring-1 ring-black/5 pointer-events-auto">
+          <div className="bg-slate-50 min-h-[500px] rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] pt-2 px-2 relative -mt-4 ring-1 ring-black/5 pointer-events-auto">
          
          {/* Pull indicator */}
-         <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6 opacity-50" />
+         <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-1 opacity-50" />
         {filteredTransactions.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-48 text-slate-400 opacity-60">
             <div className="w-16 h-16 bg-slate-200 rounded-full mb-4 animate-pulse"></div>
-            <p className="text-lg font-medium">No records for {label}</p>
+            <p className="text-lg font-medium">{t.noRecords} {label}</p>
           </div>
         ) : (
-          <div className="space-y-6 pb-4">
+          <div className="space-y-4 pb-4">
              {sortedGroupKeys.map(dateKey => {
                const dayTransactions = groupedTransactions[dateKey];
                const dayIn = dayTransactions.filter(t => t.type === 'IN').reduce((acc, c) => acc + c.amount, 0);
@@ -296,10 +297,10 @@ function App() {
                const isTodayKey = dateKey === format(new Date(), 'yyyy-MM-dd');
                return (
                  <div key={dateKey} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                   <div className="sticky top-0 bg-slate-50/95 backdrop-blur-sm z-10 py-2 px-4 mb-2 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-500 border-b border-slate-100/50">
+                   <div className="sticky top-0 bg-slate-50/95 backdrop-blur-sm z-10 py-1 px-4 mb-1 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-500 border-b border-slate-100/50">
                      <div className="flex items-center gap-2">
-                       {isTodayKey && <span className="bg-blue-500 text-white px-2 py-0.5 rounded-full text-[10px]">TODAY</span>}
-                       <span>{format(parseISO(dateKey), 'dd MMM yyyy')}</span>
+                       {isTodayKey && <span className="bg-blue-500 text-white px-2 py-0.5 rounded-full text-[10px]">{t.today}</span>}
+                       <span>{format(parseISO(dateKey), 'dd MMM yyyy', { locale: dateLocale })}</span>
                      </div>
                      <div className="flex gap-3">
                        {dayIn > 0 && <span className="text-emerald-600">+₹{dayIn.toLocaleString('en-IN')}</span>}
@@ -333,13 +334,13 @@ function App() {
           onClick={() => { if (navigator.vibrate) navigator.vibrate(10); setEditTarget(null); setActiveModal('IN'); }}
           className="pointer-events-auto flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-4 rounded-2xl shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2 font-bold text-lg active:scale-95 transition-all hover:brightness-110 border-t border-white/20 active:shadow-sm"
         >
-          <Plus size={24} strokeWidth={3} /> <span className="tracking-wide">IN</span>
+          <Plus size={24} strokeWidth={3} /> <span className="tracking-wide">{t.inBtn}</span>
         </button>
         <button
           onClick={() => { if (navigator.vibrate) navigator.vibrate(10); setEditTarget(null); setActiveModal('OUT'); }}
           className="pointer-events-auto flex-1 bg-gradient-to-r from-rose-500 to-rose-600 text-white py-4 rounded-2xl shadow-lg shadow-rose-500/30 flex items-center justify-center gap-2 font-bold text-lg active:scale-95 transition-all hover:brightness-110 border-t border-white/20 active:shadow-sm"
         >
-          <Minus size={24} strokeWidth={3} /> <span className="tracking-wide">OUT</span>
+          <Minus size={24} strokeWidth={3} /> <span className="tracking-wide">{t.outBtn}</span>
         </button>
       </div>
 
@@ -349,17 +350,17 @@ function App() {
            <div className="w-full max-w-md bg-white rounded-t-3xl p-6 pb-12 shadow-2xl animate-in slide-in-from-bottom duration-300" onClick={e => e.stopPropagation()}>
               <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
               <h3 className="text-center font-bold text-lg mb-6 text-slate-800">
-                 Manage Transaction
+                 {t.manageTransaction}
                  <div className="text-sm font-normal text-slate-400 mt-1">
-                    {actionSheetTarget.type === 'IN' ? 'Received' : 'Paid'} ₹{actionSheetTarget.amount} • {format(actionSheetTarget.date, 'dd MMM yyyy')}
+                    {actionSheetTarget.type === 'IN' ? t.received : t.paid} ₹{actionSheetTarget.amount} • {format(actionSheetTarget.date, 'dd MMM yyyy', { locale: dateLocale })}
                  </div>
               </h3>
               <div className="space-y-3">
                  <button onClick={handleEdit} className="w-full flex items-center justify-center gap-3 p-4 rounded-2xl bg-indigo-50 text-indigo-600 font-bold text-lg active:scale-95 transition-transform">
-                    <Edit2 size={22} /> Edit Amount/Note
+                    <Edit2 size={22} /> {t.editAmountNote}
                  </button>
                  <button onClick={handleDelete} className="w-full flex items-center justify-center gap-3 p-4 rounded-2xl bg-rose-50 text-rose-600 font-bold text-lg active:scale-95 transition-transform">
-                    <Trash2 size={22} /> Delete Entry
+                    <Trash2 size={22} /> {t.deleteEntry}
                  </button>
               </div>
            </div>
@@ -371,6 +372,7 @@ function App() {
         <TransactionForm
           type={activeModal}
           initialData={editTarget}
+          lang={language}
           onClose={() => { setActiveModal(null); setEditTarget(null); }}
           onSave={handleSave}
         />
@@ -379,6 +381,7 @@ function App() {
       {showCalendar && (
         <CalendarModal
           selectedDate={datePickerTarget === 'main' ? selectedDate : (datePickerTarget === 'start' ? customRange.start : customRange.end)}
+          lang={language}
           onClose={() => setShowCalendar(false)}
           onSelect={(date) => {
             if (datePickerTarget === 'main') setSelectedDate(date);

@@ -15,7 +15,7 @@ export function Keypad({ onKeyPress, onDelete }) {
               if (navigator.vibrate) navigator.vibrate(10);
               onKeyPress(key);
             }}
-            className="h-16 text-3xl font-medium rounded-2xl bg-slate-50 text-slate-900 border border-slate-200 shadow-sm hover:bg-white hover:border-slate-300 hover:shadow-md active:scale-95 active:bg-slate-100 transition-all outline-none focus:ring-2 focus:ring-slate-400"
+            className="h-14 text-2xl font-medium rounded-2xl bg-slate-50 text-slate-900 border border-slate-200 shadow-sm hover:bg-white hover:border-slate-300 hover:shadow-md active:scale-95 active:bg-slate-100 transition-all outline-none focus:ring-2 focus:ring-slate-400"
           >
             {key}
           </button>

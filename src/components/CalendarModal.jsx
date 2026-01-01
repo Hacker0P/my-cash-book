@@ -13,8 +13,12 @@ import {
   startOfWeek,
   endOfWeek
 } from 'date-fns';
+import { TRANSLATIONS } from '../translations';
+import { bn, enUS } from 'date-fns/locale';
 
-export function CalendarModal({ selectedDate, onClose, onSelect }) {
+export function CalendarModal({ selectedDate, onClose, onSelect, lang = 'en' }) {
+  const t = TRANSLATIONS[lang];
+  const dateLocale = lang === 'bn' ? bn : enUS;
   const [currentMonth, setCurrentMonth] = useState(startOfMonth(selectedDate || new Date()));
 
   const days = eachDayOfInterval({
@@ -32,7 +36,7 @@ export function CalendarModal({ selectedDate, onClose, onSelect }) {
         {/* Header */}
         <div className="bg-slate-900 p-4 flex items-center justify-between text-white border-b border-transparent">
            <h2 className="text-xl font-bold tracking-wide pl-2">
-             {format(currentMonth, 'MMMM yyyy')}
+             {format(currentMonth, 'MMMM yyyy', { locale: dateLocale })}
            </h2>
            <div className="flex gap-1">
              <button onClick={handlePrevMonth} className="p-2 hover:bg-white/10 rounded-full transition-colors">
@@ -91,7 +95,7 @@ export function CalendarModal({ selectedDate, onClose, onSelect }) {
              }}
              className="text-sm font-bold text-slate-600 hover:text-slate-900 uppercase tracking-wide px-4 py-2 rounded-lg hover:bg-slate-100 transition-colors"
            >
-             Jump to Today
+             {t.jumpToToday}
            </button>
         </div>
       </div>

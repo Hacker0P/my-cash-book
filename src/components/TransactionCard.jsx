@@ -1,15 +1,16 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { ArrowDownLeft, ArrowUpRight, Edit2, Trash2 } from 'lucide-react';
-import { OUT_CATEGORIES, IN_CATEGORIES } from '../constants';
+import { useCategories } from '../hooks/useCategories';
 import { TRANSLATIONS } from '../translations';
 
 export function TransactionCard({ transaction, lang = 'en', onLongPress, onEdit, onDelete }) {
   const isIn = transaction.type === 'IN';
   const t = TRANSLATIONS[lang];
+  const { getCategories } = useCategories();
   
-  // Find category if exists
-  const categoryList = isIn ? IN_CATEGORIES : OUT_CATEGORIES;
+  // Find category from merged list (includes custom ones)
+  const categoryList = getCategories(transaction.type);
   const categoryItem = transaction.category 
     ? categoryList.find(c => c.id === transaction.category)
     : null;
@@ -23,7 +24,10 @@ export function TransactionCard({ transaction, lang = 'en', onLongPress, onEdit,
   );
 
   // Translate category label if present, else default
-  const catLabel = categoryItem ? (t[categoryItem.id] || categoryItem.label) : null;
+  // For custom categories, label is direct string. For built-ins, look up translation.
+  const catLabel = categoryItem 
+      ? (categoryItem.isCustom ? categoryItem.label : (t[categoryItem.id] || categoryItem.label)) 
+      : null;
   const displayText = transaction.note || catLabel || (isIn ? t.received : t.paid);
 
   // Long Press Logic

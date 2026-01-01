@@ -115,7 +115,7 @@ export const generatePDF = async (transactions, periodLabel, summary, t, userNam
     const txnData = [
       format(txn.date, 'dd/MM/yyyy HH:mm'),
       txn.type === 'IN' ? t.cashIn : t.cashOut,
-      txn.category ? (t[txn.category.toLowerCase()] || txn.category) : (txn.note || '-'),
+      txn.category ? (t[String(txn.category).toLowerCase()] || txn.category) : (txn.note || '-'),
       { 
         content: txn.amount.toLocaleString('en-IN'), 
         styles: { 
