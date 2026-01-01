@@ -180,100 +180,108 @@ function App() {
 
   return (
     <Layout>
-      <MainHeader 
-         isScrolled={isScrolled}
-         userName={userName}
-         t={t}
-
-         balance={netBalance}
-         onOpenMenu={() => setShowMenu(true)}
-         isInstallable={isInstallable}
-         onInstall={install}
-         onExportPDF={() => generatePDF(filteredTransactions, label, { totalIn, totalOut, netBalance }, t, userName)}
-         onOpenCalendar={() => { setDatePickerTarget('main'); setShowCalendar(true); }}
-         onOpenFilters={() => { /* Placeholder for future filter modal */ }}
-      >
-         {/* Children: View Toggles & Custom Range UI */}
-         <div className="space-y-6">
-            {/* Toggles */}
-            <div className="flex justify-center bg-slate-950/50 p-1.5 rounded-2xl w-fit mx-auto overflow-x-auto max-w-full border border-white/5 backdrop-blur-sm">
-               {['day', 'week', 'month', 'year', 'custom'].map(mode => (
-                 <button
-                   key={mode}
-                   onClick={() => setViewMode(mode)}
-                   className={`px-4 py-2 rounded-xl text-xs font-bold capitalize transition-all whitespace-nowrap ${
-                     viewMode === mode 
-                       ? 'bg-white text-slate-900 shadow-lg shadow-black/10 scale-100' 
-                       : 'text-slate-400 hover:text-white hover:bg-white/5 scale-95 hover:scale-100'
-                   }`}
-                 >
-                   {t[mode] || mode}
-                 </button>
-               ))}
-            </div>
-
-            {/* Custom Range */}
-            {viewMode === 'custom' && (
-              <div className="flex justify-center gap-2 items-center animate-in fade-in slide-in-from-top-2">
-                 <button onClick={() => { setDatePickerTarget('start'); setShowCalendar(true); }} className="bg-white/10 px-4 py-2 rounded-xl text-sm text-white font-medium border border-white/10 hover:bg-white/20 transition-colors">
-                   {format(customRange.start, 'dd MMM yyyy')}
-                 </button>
-                 <ArrowRight size={16} className="text-white/30" />
-                 <button onClick={() => { setDatePickerTarget('end'); setShowCalendar(true); }} className="bg-white/10 px-4 py-2 rounded-xl text-sm text-white font-medium border border-white/10 hover:bg-white/20 transition-colors">
-                   {format(customRange.end, 'dd MMM yyyy')}
-                 </button>
-              </div>
-            )}
-
-            {/* Day Nav */}
-            {viewMode === 'day' && (
-              <div className="flex justify-center gap-2 animate-in fade-in slide-in-from-top-2">
-                 <button 
-                   onClick={() => { setDatePickerTarget('main'); setShowCalendar(true); }}
-                   className="bg-white/10 px-5 py-2 rounded-full text-xs font-bold text-white border border-white/10 hover:bg-white/20 transition-colors flex items-center gap-2"
-                 >
-                   <CalendarIcon size={14} className="opacity-70" />
-                   {format(selectedDate, 'dd MMM yyyy')}
-                 </button>
-                 
-                 <button 
-                   onClick={() => setSelectedDate(new Date())}
-                   className={`px-5 py-2 rounded-full text-xs font-bold tracking-wide transition-all ${
-                     isToday(selectedDate) 
-                       ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
-                       : 'bg-white/5 text-slate-400 border border-white/5 hover:bg-white/10'
-                   }`}
-                 >
-                   {t.today}
-                 </button>
-              </div>
-            )}
-            
-            {/* Summary Cards */}
-            <div className="grid grid-cols-2 gap-4 pb-8">
-               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-emerald-500/30 shadow-lg relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-3 opacity-10 transform translate-x-1 -translate-y-1">
-                     <ArrowDownLeft size={48} className="text-emerald-400" />
+      <div className="relative h-full flex flex-col">
+        {/* Fixed Header Layer */}
+        <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none">
+          <MainHeader 
+             isScrolled={isScrolled}
+             userName={userName}
+             t={t}
+             balance={netBalance}
+             onOpenMenu={() => setShowMenu(true)}
+             isInstallable={isInstallable}
+             onInstall={install}
+             onExportPDF={() => generatePDF(filteredTransactions, label, { totalIn, totalOut, netBalance }, t, userName)}
+             onOpenCalendar={() => { setDatePickerTarget('main'); setShowCalendar(true); }}
+             onOpenFilters={() => { /* Placeholder */ }}
+             className="pointer-events-auto"
+          >
+             {/* Children: View Toggles & Custom Range UI */}
+             <div className="space-y-6">
+                {/* Toggles */}
+                <div className="flex justify-center bg-slate-950/50 p-1.5 rounded-2xl w-fit mx-auto overflow-x-auto max-w-full border border-white/5 backdrop-blur-sm pointer-events-auto">
+                   {['day', 'week', 'month', 'year', 'custom'].map(mode => (
+                     <button
+                       key={mode}
+                       onClick={() => setViewMode(mode)}
+                       className={`px-4 py-2 rounded-xl text-xs font-bold capitalize transition-all whitespace-nowrap ${
+                         viewMode === mode 
+                           ? 'bg-white text-slate-900 shadow-lg shadow-black/10 scale-100' 
+                           : 'text-slate-400 hover:text-white hover:bg-white/5 scale-95 hover:scale-100'
+                       }`}
+                     >
+                       {t[mode] || mode}
+                     </button>
+                   ))}
+                </div>
+    
+                {/* Custom Range */}
+                {viewMode === 'custom' && (
+                  <div className="flex justify-center gap-2 items-center animate-in fade-in slide-in-from-top-2 pointer-events-auto">
+                     <button onClick={() => { setDatePickerTarget('start'); setShowCalendar(true); }} className="bg-white/10 px-4 py-2 rounded-xl text-sm text-white font-medium border border-white/10 hover:bg-white/20 transition-colors">
+                       {format(customRange.start, 'dd MMM yyyy')}
+                     </button>
+                     <ArrowRight size={16} className="text-white/30" />
+                     <button onClick={() => { setDatePickerTarget('end'); setShowCalendar(true); }} className="bg-white/10 px-4 py-2 rounded-xl text-sm text-white font-medium border border-white/10 hover:bg-white/20 transition-colors">
+                       {format(customRange.end, 'dd MMM yyyy')}
+                     </button>
                   </div>
-                  <div className="text-emerald-100 text-[10px] font-bold uppercase tracking-widest mb-1 opacity-80">{t.totalIn}</div>
-                  <div className="text-2xl font-black text-white tracking-tight drop-shadow-sm">₹{totalIn.toLocaleString('en-IN')}</div>
-               </div>
-               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-rose-500/30 shadow-lg relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-3 opacity-10 transform translate-x-1 -translate-y-1">
-                     <ArrowUpRight size={48} className="text-rose-400" />
+                )}
+    
+                {/* Day Nav */}
+                {viewMode === 'day' && (
+                  <div className="flex justify-center gap-2 animate-in fade-in slide-in-from-top-2 pointer-events-auto">
+                     <button 
+                       onClick={() => { setDatePickerTarget('main'); setShowCalendar(true); }}
+                       className="bg-white/10 px-5 py-2 rounded-full text-xs font-bold text-white border border-white/10 hover:bg-white/20 transition-colors flex items-center gap-2"
+                     >
+                       <CalendarIcon size={14} className="opacity-70" />
+                       {format(selectedDate, 'dd MMM yyyy')}
+                     </button>
+                     
+                     <button 
+                       onClick={() => setSelectedDate(new Date())}
+                       className={`px-5 py-2 rounded-full text-xs font-bold tracking-wide transition-all ${
+                         isToday(selectedDate) 
+                           ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
+                           : 'bg-white/5 text-slate-400 border border-white/5 hover:bg-white/10'
+                       }`}
+                     >
+                       {t.today}
+                     </button>
                   </div>
-                  <div className="text-rose-100 text-[10px] font-bold uppercase tracking-widest mb-1 opacity-80">{t.totalOut}</div>
-                  <div className="text-2xl font-black text-white tracking-tight drop-shadow-sm">₹{totalOut.toLocaleString('en-IN')}</div>
-               </div>
-            </div>
-         </div>
-      </MainHeader>
+                )}
+                
+                {/* Summary Cards */}
+                <div className="grid grid-cols-2 gap-4 pb-8 pointer-events-none">
+                   <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-emerald-500/30 shadow-lg relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 p-3 opacity-10 transform translate-x-1 -translate-y-1">
+                         <ArrowDownLeft size={48} className="text-emerald-400" />
+                      </div>
+                      <div className="text-emerald-100 text-[10px] font-bold uppercase tracking-widest mb-1 opacity-80">{t.totalIn}</div>
+                      <div className="text-2xl font-black text-white tracking-tight drop-shadow-sm">₹{totalIn.toLocaleString('en-IN')}</div>
+                   </div>
+                   <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-rose-500/30 shadow-lg relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 p-3 opacity-10 transform translate-x-1 -translate-y-1">
+                         <ArrowUpRight size={48} className="text-rose-400" />
+                      </div>
+                      <div className="text-rose-100 text-[10px] font-bold uppercase tracking-widest mb-1 opacity-80">{t.totalOut}</div>
+                      <div className="text-2xl font-black text-white tracking-tight drop-shadow-sm">₹{totalOut.toLocaleString('en-IN')}</div>
+                   </div>
+                </div>
+             </div>
+          </MainHeader>
+        </div>
 
-      {/* Transactions List */}
-      <main 
-         onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 20)}
-         className="flex-1 overflow-y-auto pb-24 bg-slate-50 -mt-8 rounded-t-3xl relative z-20 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] pt-6 px-2 transition-transform duration-300"
-      >
+        {/* Scrollable Content Layer */}
+        <main 
+           onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 50)}
+           className="flex-1 overflow-y-auto w-full relative z-20 pt-[420px] pb-24 px-0 no-scrollbar pointer-events-none"
+        >
+          <div className="bg-slate-50 min-h-[500px] rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] pt-6 px-2 relative -mt-4 ring-1 ring-black/5 pointer-events-auto">
+         
+         {/* Pull indicator */}
+         <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6 opacity-50" />
         {filteredTransactions.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-48 text-slate-400 opacity-60">
             <div className="w-16 h-16 bg-slate-200 rounded-full mb-4 animate-pulse"></div>
@@ -316,6 +324,7 @@ function App() {
              })}
           </div>
         )}
+      </div>
       </main>
 
       {/* Floating Action Buttons */}
@@ -394,6 +403,7 @@ function App() {
             <AnalyticsDashboard transactions={transactions} onClose={() => setShowAnalytics(false)} t={t} />
          </div>
       )}
+      </div>
     </Layout>
   );
 }

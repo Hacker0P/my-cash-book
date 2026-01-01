@@ -28,3 +28,5 @@ android/app/build
 android/.gradle
 android/local.properties
 ios/App/App/public
+
+.vercel

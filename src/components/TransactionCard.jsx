@@ -48,7 +48,7 @@ export function TransactionCard({ transaction, lang = 'en', onLongPress, onEdit,
       longPressTimer.current = null;
     }
     // If it was a long press, prevent default click behavior if needed
-    if (isLongPress.current && e.cancelable) {
+    if (isLongPress.current && e && e.cancelable) {
        e.preventDefault(); 
     }
   };

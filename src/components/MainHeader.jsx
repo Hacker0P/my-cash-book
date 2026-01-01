@@ -12,12 +12,13 @@ export function MainHeader({
   onExportPDF, 
   onOpenCalendar,
   onOpenFilters,
-  children
+  children,
+  className
 }) {
   return (
-    <div className={`sticky top-0 z-10 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200/60' : 'bg-transparent'}`}>
-      {/* Background Gradient */}
-      {!isScrolled && <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 opacity-100 -z-10" />}
+    <div className={`sticky top-0 z-10 transition-all duration-300 ${isScrolled ? 'backdrop-blur-xl shadow-lg border-b border-white/10' : ''} ${className}`}>
+      {/* Background Gradient - Always present now */}
+      <div className={`absolute inset-0 bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 -z-10 transition-opacity duration-300 ${isScrolled ? 'opacity-95' : 'opacity-100'}`} />
       
       <div className={`transition-all duration-300 px-6 ${isScrolled ? 'py-4' : 'pt-12 pb-6'}`}>
         
@@ -26,7 +27,7 @@ export function MainHeader({
            <button 
              onClick={onOpenMenu}
              aria-label="Open Menu"
-             className={`p-2 rounded-full transition-colors active:scale-95 ${isScrolled ? 'hover:bg-slate-100 text-slate-700' : 'bg-white/10 hover:bg-white/20 text-white'}`}
+             className="p-2 rounded-full transition-colors active:scale-95 bg-white/10 hover:bg-white/20 text-white"
            >
              <Menu size={24} strokeWidth={isScrolled ? 2 : 2.5} />
            </button>
@@ -42,25 +43,25 @@ export function MainHeader({
              )}
              
              {/* Action Buttons Group */}
-             <div className={`flex gap-2 ${isScrolled ? 'text-slate-600' : 'text-white'}`}>
+             <div className="flex gap-2 text-white">
                 <button 
                    onClick={onExportPDF}
                    aria-label="Export PDF"
-                   className={`p-2 rounded-xl transition-all active:scale-95 ${isScrolled ? 'hover:bg-slate-100' : 'bg-white/10 hover:bg-white/20'}`}
+                   className="p-2 rounded-xl transition-all active:scale-95 bg-white/10 hover:bg-white/20"
                 >
                    <Download size={20} />
                 </button>
                 <button 
                    onClick={onOpenCalendar}
                    aria-label="Open Calendar"
-                   className={`p-2 rounded-xl transition-all active:scale-95 ${isScrolled ? 'hover:bg-slate-100' : 'bg-white/10 hover:bg-white/20'}`}
+                   className="p-2 rounded-xl transition-all active:scale-95 bg-white/10 hover:bg-white/20"
                 >
                    <CalendarIcon size={20} />
                 </button>
                 <button 
                    onClick={onOpenFilters}
                    aria-label="Filter Options"
-                   className={`p-2 rounded-xl transition-all active:scale-95 ${isScrolled ? 'hover:bg-slate-100' : 'bg-white/10 hover:bg-white/20'}`}
+                   className="p-2 rounded-xl transition-all active:scale-95 bg-white/10 hover:bg-white/20"
                 >
                    <Filter size={20} />
                 </button>
@@ -92,10 +93,10 @@ export function MainHeader({
            {/* Balance Card (Transforms on scroll) */}
            <div className={`transition-all duration-500 origin-left ${isScrolled ? 'scale-75 -translate-y-1' : 'scale-100 translate-y-0'}`}>
               <div className={`glass-card ${!isScrolled ? 'bg-white/10 backdrop-blur-md border border-white/10 p-5 rounded-3xl shadow-2xl' : ''}`}>
-                 <div className={`text-sm font-bold uppercase tracking-widest mb-1 ${isScrolled ? 'text-slate-400' : 'text-emerald-100'}`}>
+                 <div className={`text-sm font-bold uppercase tracking-widest mb-1 ${isScrolled ? 'text-emerald-200' : 'text-emerald-100'}`}>
                     Net Balance
                  </div>
-                 <div className={`text-4xl font-black tracking-tighter ${isScrolled ? 'text-slate-900' : 'text-white drop-shadow-sm'}`}>
+                 <div className="text-4xl font-black tracking-tighter text-white drop-shadow-sm">
                     ₹{balance.toLocaleString('en-IN')}
                  </div>
               </div>

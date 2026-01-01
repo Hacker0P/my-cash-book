@@ -10,10 +10,13 @@
 html {
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 select-none overflow-x-hidden;
+  @apply bg-slate-100 text-slate-900 select-none overflow-hidden;
+  height: 100dvh;
   overscroll-behavior-y: none;
 }
 
