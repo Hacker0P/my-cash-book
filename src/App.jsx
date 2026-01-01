@@ -329,7 +329,7 @@ function App() {
       </main>
 
       {/* Floating Action Buttons */}
-      <div className="fixed bottom-6 left-0 right-0 flex justify-center gap-4 px-6 z-40 max-w-md mx-auto pointer-events-none">
+      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4 px-6 z-40 w-full mx-auto pointer-events-none">
         <button
           onClick={() => { if (navigator.vibrate) navigator.vibrate(10); setEditTarget(null); setActiveModal('IN'); }}
           className="pointer-events-auto flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-4 rounded-2xl shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2 font-bold text-lg active:scale-95 transition-all hover:brightness-110 border-t border-white/20 active:shadow-sm"

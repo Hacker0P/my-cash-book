@@ -30,60 +30,36 @@ export function TransactionCard({ transaction, lang = 'en', onLongPress, onEdit,
       : null;
   const displayText = transaction.note || catLabel || (isIn ? t.received : t.paid);
 
-  // Long Press Logic
-  const longPressTimer = React.useRef(null);
-  const isLongPress = React.useRef(false);
-
-  const startPress = () => {
-    isLongPress.current = false;
-    longPressTimer.current = setTimeout(() => {
-      isLongPress.current = true;
-      if (onLongPress) {
-         // Vibrate if available (Navigator.vibrate is standard web API)
-         if (navigator.vibrate) navigator.vibrate(10);
-         onLongPress(transaction);
-      }
-    }, 500); // 500ms threshold
-  };
-
-  const cancelPress = (e) => {
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current);
-      longPressTimer.current = null;
-    }
-    // If it was a long press, prevent default click behavior if needed
-    if (isLongPress.current && e && e.cancelable) {
-       e.preventDefault(); 
-    }
-  };
-
   // Swipe Logic
   const [swipeOffset, setSwipeOffset] = React.useState(0);
   const touchStart = React.useRef(null);
+  const startOffset = React.useRef(0);
 
   const onTouchStart = (e) => {
     touchStart.current = e.targetTouches[0].clientX;
-    startPress();
+    startOffset.current = swipeOffset;
   };
 
   const onTouchMove = (e) => {
-    if (!touchStart.current) return;
+    if (touchStart.current === null) return;
     const currentTouch = e.targetTouches[0].clientX;
     const diff = currentTouch - touchStart.current;
     
-    // Only allow swiping left (negative diff)
-    if (diff < 0) {
-       // Limit swipe to -150px
-       const newOffset = Math.max(diff, -150);
-       setSwipeOffset(newOffset);
-       // Prevent scroll if swiping sideways
-       if (Math.abs(diff) > 10) e.preventDefault();
-       cancelPress(e); // Cancel long press if swiping
+    // Calculate potential new offset based on startOffset
+    const newOffset = Math.min(0, Math.max(-140, startOffset.current + diff));
+
+    // Only prevent default if we are actively swiping horizontally
+    if (Math.abs(diff) > 10) {
+        if ((startOffset.current === 0 && diff < 0) || (startOffset.current === -140 && diff > 0) || (newOffset !== 0 && newOffset !== -140)) {
+             e.preventDefault();
+        }
     }
+    
+    setSwipeOffset(newOffset);
   };
 
   const onTouchEnd = () => {
-    if (swipeOffset < -75) {
+    if (swipeOffset < -70) {
        // Snap open
        setSwipeOffset(-140);
     } else {
@@ -91,7 +67,6 @@ export function TransactionCard({ transaction, lang = 'en', onLongPress, onEdit,
        setSwipeOffset(0);
     }
     touchStart.current = null;
-    cancelPress({ cancelable: false }); // Cleanup
   };
 
   return (
@@ -123,9 +98,7 @@ export function TransactionCard({ transaction, lang = 'en', onLongPress, onEdit,
 
        {/* Main Card Content */}
        <div 
-         onMouseDown={startPress}
-         onMouseUp={cancelPress}
-         onMouseLeave={() => { cancelPress(); setSwipeOffset(0); }} // Auto close on leave for mouse users
+         onMouseLeave={() => { setSwipeOffset(0); }} // Auto close on leave for mouse users
          onTouchStart={onTouchStart}
          onTouchEnd={onTouchEnd}
          onTouchMove={onTouchMove}
