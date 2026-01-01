@@ -27,3 +27,15 @@ export const OUT_CATEGORIES = [
   { id: 'entertainment', label: 'Fun', icon: Clapperboard },
   { id: 'household', label: 'Home', icon: Home },
 ];
+
+export const AVAILABLE_ICONS = [
+  'Stars', 'Wallet', 'Banknote', 'CreditCard', 'Coins', 'ChartPie',
+  'ShoppingBag', 'ShoppingCart', 'Gift', 'Package', 'Truck',
+  'Home', 'Building', 'Landmark', 'Key', 'Wrench', 'Hammer',
+  'Coffee', 'Utensils', 'Pizza', 'GlassWater', 'Car', 'Bike', 'Bus', 'Plane', 'Fuel',
+  'Zap', 'Wifi', 'Phone', 'Smartphone', 'Monitor', 'Tv',
+  'HeartPulse', 'Stethoscope', 'Pill', 'Dumbbell', 'Activity',
+  'GraduationCap', 'Book', 'BookOpen', 'Briefcase', 'Users', 'User',
+  'Clapperboard', 'Music', 'Gamepad', 'Ticket', 'Camera', 'Image',
+  'Sun', 'Moon', 'Cloud', 'Umbrella', 'Scissors', 'Shirt', 'Watch'
+];

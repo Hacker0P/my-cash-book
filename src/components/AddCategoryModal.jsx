@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Check } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { TRANSLATIONS } from '../translations';
+import { AVAILABLE_ICONS } from '../constants'; // Added import
 
 export function AddCategoryModal({ type, onClose, onSave, lang = 'en' }) {
   const [label, setLabel] = useState('');
